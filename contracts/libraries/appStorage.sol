@@ -10,4 +10,16 @@ struct appStorage {
 
     string _name;
     string _symbol;
+
+
+    // Mapping from token ID to owner address
+    mapping(uint256 => address)  _owners;
+
+
+    // Mapping from token ID to approved address
+    mapping(uint256 => address)  _tokenApprovals;
+
+    // Mapping from owner to operator approvals
+    mapping(address => mapping(address => bool))  _operatorApprovals;
+
 }

@@ -8,7 +8,6 @@ import "../interfaces/IERC20.sol";
 import "../interfaces/IERC721.sol";
 import "../libraries/Address.sol";
 import "../libraries/Strings.sol";
-import "../libraries/LibERC721Storage.sol";
 import {appStorage} from "../libraries/appStorage.sol";
 
 /**
@@ -38,6 +37,9 @@ import {appStorage} from "../libraries/appStorage.sol";
  */
 contract ERC20andERC721 is IERC20, IERC721 {
     
+    using Address for address;
+    using Strings for uint256;
+
     appStorage internal ds;
 
     /**
@@ -94,9 +96,10 @@ contract ERC20andERC721 is IERC20, IERC721 {
     }
 
     /**
-     * @dev See {IERC20-balanceOf}.
+     * @dev See {IERC20 and IERC721-balanceOf}.
      */
     function balanceOf(address account) public view virtual override returns (uint256) {
+        require(account != address(0));
         return ds._balances[account];
     }
 
@@ -384,11 +387,11 @@ contract ERC20andERC721 is IERC20, IERC721 {
         address to,
         uint256 amount
     ) internal virtual {}
-}
 
 
 
-// SPDX-License-Identifier: MIT
+
+
 // OpenZeppelin Contracts (last updated v4.6.0) (token/ERC721/ERC721.sol)
 
 
@@ -398,8 +401,7 @@ contract ERC20andERC721 is IERC20, IERC721 {
  * {ERC721Enumerable}.
  */
 
-    using Address for address;
-    using Strings for uint256;
+    
 
 
     /**
@@ -415,16 +417,13 @@ contract ERC20andERC721 is IERC20, IERC721 {
     /**
      * @dev See {IERC721-balanceOf}.
      */
-    function balanceOf(address owner) public view virtual override returns (uint256) {
-        require(owner != address(0), "ERC721: address zero is not a valid owner");
-        return  s._balances[owner];
-    }
+    
 
     /**
      * @dev See {IERC721-ownerOf}.
      */
     function ownerOf(uint256 tokenId) public view virtual override returns (address) {
-        address owner = s._owners[tokenId];
+        address owner = ds._owners[tokenId];
         require(owner != address(0), "ERC721: invalid token ID");
         return owner;
     }
@@ -432,9 +431,6 @@ contract ERC20andERC721 is IERC20, IERC721 {
     /**
      * @dev See {IERC721Metadata-name}.
      */
-    function name() public view virtual  returns (string memory) {
-        return s._name;
-    }
 
     /**
      * @dev See {IERC721Metadata-symbol}.
